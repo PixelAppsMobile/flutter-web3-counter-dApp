@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dapp/constants.dart';
@@ -16,17 +15,17 @@ class ContractService extends ChangeNotifier {
   bool loading = true;
 
   // It allows us to establish connection with ETH
-  late Web3Client _web3client;
-  late DeployedContract _deployedContract;
+  late final Web3Client _web3client;
+  late final DeployedContract _deployedContract;
   // Address of our deployed smart contract on ETH
-  late EthereumAddress _contractAddress;
+  late final EthereumAddress _contractAddress;
   // Function Defined in our Smart Contract to increment Count
-  late ContractFunction _increment;
+  late final ContractFunction _increment;
   // Function Defined in our Smart Contract to get Count
-  late ContractFunction _count;
-  late String _abiCode;
+  late final ContractFunction _count;
+  late final String _abiCode;
   // credentials of deployer
-  Credentials? _credentials;
+  late final Credentials _credentials;
 
   int count = 0;
 
@@ -74,7 +73,7 @@ class ContractService extends ChangeNotifier {
     final num = await _web3client
         .call(contract: _deployedContract, function: _count, params: []);
 
-    count = int.parse(num[0].toString());
+    count = int.parse(num.first.toString());
     loading = false;
     notifyListeners();
   }
@@ -83,7 +82,7 @@ class ContractService extends ChangeNotifier {
     loading = true;
     notifyListeners();
     await _web3client.sendTransaction(
-        _credentials!,
+        _credentials,
         Transaction.callContract(
             contract: _deployedContract,
             function: _increment,
